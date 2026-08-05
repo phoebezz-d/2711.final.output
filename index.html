@@ -239,8 +239,8 @@
     <span class="kick">Explore the Data</span>
     <h2>Paired-site map explorer</h2>
     <p>Two burnt study sites. Step through post-fire satellite greenness (NDVI) to watch canopy
-    recovery, and toggle the Fire Extent &amp; Severity Mapping (FESM) layer to see how hard each
-    site burned.</p>
+    recovery, toggle the Fire Extent &amp; Severity Mapping (FESM) layer to see how hard each
+    site burned, and toggle the 2-month difference map to see where greening is happening.</p>
   </div>
 
   <div class="explorer">
@@ -256,6 +256,7 @@
       <div class="steps" id="steps"></div>
       <div class="row">
         <label class="toggle"><input type="checkbox" id="fesmToggle"><span>🔥 Fire severity (FESM) layer</span></label>
+        <label class="toggle"><input type="checkbox" id="diffToggle"><span>🔷 2-month difference map</span></label>
         <span class="hint">NDVI green = healthy canopy · yellow/orange = stressed or bare</span>
       </div>
       <div class="legend" id="legend">
@@ -263,6 +264,10 @@
         <span><i style="background:#a6c34a"></i>Recovering</span>
         <span><i style="background:#e6c04a"></i>Sparse</span>
         <span><i style="background:#d98a3a"></i>Bare / burnt</span>
+      </div>
+      <div class="legend" id="legendDiff" style="display:none">
+        <span><i style="background:#e6c94a"></i>Yellow — no change (unburnt, or burnt with no recovery yet)</span>
+        <span><i style="background:#4a8fe6"></i>Blue — greening between the two dates</span>
       </div>
       <p class="cap" id="cap"></p>
     </div>
@@ -290,6 +295,31 @@
   </div>
   <p class="hint" style="margin-top:18px">Assumption: darker NDVI signal ≈ overstorey growth.
   Signals are directional for an in-progress paired analysis, not final causal claims.</p>
+
+  <div style="margin-top:48px">
+    <h3 class="sage">Reading the difference maps</h3>
+    <p class="dim">Because both dates in the difference map are post-fire, the fire signal cancels
+    out and what's left isolates change over the two months, not fire damage itself. A few caveats
+    on reading it:</p>
+    <ul class="dim" style="margin:14px 0 0;padding-left:20px;line-height:1.8">
+      <li><b class="sage">Yellow is ambiguous.</b> It means either unburnt land or burnt land with
+      no recovery yet — the difference map alone can't separate the two, which is why the FESM
+      layer matters alongside it.</li>
+      <li><b class="sage">Pattern differs, not just amount.</b> Moonpar's greening is concentrated
+      with a sharply bounded fire perimeter; Dalmorton's is diffuse and low-magnitude along the
+      valley floor and river corridor. That spatial structure is more informative than a single
+      average value — it shows where recovery initiates.</li>
+      <li><b class="sage">Topography controls early recovery.</b> Greening follows gullies and
+      riparian zones first, with ridges recovering last, likely from moisture availability and
+      lower burn severity in drainage lines. If paired sites differ in aspect or drainage density,
+      that could swamp any Lantana signal — future comparisons should stratify by slope position
+      rather than compare whole scenes.</li>
+      <li><b class="sage">Not canopy recovery yet.</b> At ~2 months (≈0.2–0.4 NDVI change at both
+      sites) this reflects epicormic shoots and ground-layer flush, not structural canopy recovery
+      in eucalypt forest. It's an early, partial answer to a research question about canopy
+      recovery <i>rate</i> — the full answer needs a longer window.</li>
+    </ul>
+  </div>
 </div></section>
 
 <!-- ABOUT -->
@@ -338,9 +368,6 @@
     <div class="ref"><b>Rossiter-Rachor et al. 2008; Setterfield et al. 2010</b> — Northern-Australia parallel: invasive gamba grass amplifies fuel loads and fire intensity.</div>
     <div class="ref"><b>Gooden et al. 2009</b> — Post-fire, Lantana-invaded sites do not converge with uninvaded reference sites, even after removal.</div>
     <div class="ref"><b>McColl-Gausden et al. 2023</b> — Lantana abundance higher at high-severity 2019–20 fire sites.</div>
-    <div class="ref">Setterfield, S. A., Rossiter‐Rachor, N. A., Hutley, L. B., Douglas, M. M., &amp; Williams, R. J. (2010). BIODIVERSITY RESEARCH: Turning up the heat: the impacts of <i>Andropogon gayanus</i> (gamba grass) invasion on fire behaviour in northern Australian savannas. <i>Diversity and Distributions</i>, 16(5), 854–861. <a href="https://doi.org/10.1111/j.1472-4642.2010.00688.x">https://doi.org/10.1111/j.1472-4642.2010.00688.x</a></div>
-    <div class="ref">State Government of NSW &amp; NSW Department of Climate Change, Energy, the Environment and Water. (2020). <i>Fire Extent and Severity Mapping (FESM) 2018/19</i>. The Sharing and Enabling Environmental Data Portal. <a href="https://datasets.seed.nsw.gov.au/dataset/c2427005-febe-4e4e-a300-2c4ddd0066be">https://datasets.seed.nsw.gov.au/dataset/c2427005-febe-4e4e-a300-2c4ddd0066be</a></div>
-    <div class="ref">Geoscience Australia. (2022). <i>Geoscience Australia Sentinel-2A MSI Analysis Ready Data Collection 3 - DEA Surface Reflectance (Sentinel-2A MSI)</i> [Data set]. Geoscience Australia. <a href="https://doi.org/10.26186/146552">https://doi.org/10.26186/146552</a></div>
   </div>
 </div></section>
 
@@ -354,6 +381,8 @@
 const DATA = {
   dal: {
     fesm:"images/Dalmorton/DALMORTON_FESM.png",
+    diff:"images/Dalmorton/DAL_DIFF.png",
+    diffCap:"<b>Two-date difference (Oct–Dec).</b> Dalmorton's signal is diffuse and low-magnitude, spread thinly along the valley floor and river corridor while ridges stay flat.",
     steps:[
       {k:"Before/After",img:"images/Dalmorton/DAL_BeforevAfter.png",cap:"<b>Split view:</b> pre-fire canopy (left) vs immediately post-fire (right). The burnt right panel shows the greenness crash — a bare, orange fire scar along the river corridor."},
       {k:"+6 weeks",img:"images/Dalmorton/DAL_Afterv6Weeks.png",cap:"<b>6 weeks post-fire:</b> first flush of regrowth. Faint greening returns to lower-severity edges while severe cores stay bare."},
@@ -364,6 +393,8 @@ const DATA = {
   },
   moon: {
     fesm:"images/Moonpar/MOONPAR_FESM.png",
+    diff:"images/Moonpar/MOON_DIFF.png",
+    diffCap:"<b>Two-date difference (Oct–Dec).</b> Moonpar's signal is concentrated and sharply bounded — a clear fire perimeter with mid-strength greening in the interior.",
     steps:[
       {k:"Before/After",img:"images/Moonpar/MOON_BeforevAfter1.png",cap:"<b>Split view A:</b> pre- vs post-fire NDVI at Moonpar. The right panel drops toward yellow — canopy stressed across the burn."},
       {k:"Before/After",img:"images/Moonpar/MOON_BeforevAfter2.png",cap:"<b>Split view B:</b> second framing of the same fire event over the valley."},
@@ -375,38 +406,45 @@ const DATA = {
     ]
   }
 };
-let site="dal",step=0,fesm=false;
+let site="dal",step=0,fesm=false,diff=false;
 const stageImg=document.getElementById('stageImg'),badge=document.getElementById('badge'),
   badgeLbl=document.getElementById('badgeLbl'),stepsEl=document.getElementById('steps'),
-  cap=document.getElementById('cap'),legend=document.getElementById('legend');
+  cap=document.getElementById('cap'),legend=document.getElementById('legend'),
+  legendDiff=document.getElementById('legendDiff'),
+  fesmToggle=document.getElementById('fesmToggle'),diffToggle=document.getElementById('diffToggle');
 function renderSteps(){
   stepsEl.innerHTML="";
   DATA[site].steps.forEach((s,i)=>{
     const b=document.createElement('button');
-    b.className=(!fesm&&i===step)?'on':'';
+    b.className=(!fesm&&!diff&&i===step)?'on':'';
     b.innerHTML=s.k.replace(/(.*)/,'<b>$1</b>');
-    b.onclick=()=>{step=i;fesm=false;document.getElementById('fesmToggle').checked=false;update();};
+    b.onclick=()=>{step=i;fesm=false;diff=false;fesmToggle.checked=false;diffToggle.checked=false;update();};
     stepsEl.appendChild(b);
   });
 }
 function update(){
   const d=DATA[site];
+  legend.style.display='flex'; legendDiff.style.display='none';
   if(fesm){
     stageImg.src=d.fesm; badge.className='badge fesm'; badgeLbl.textContent='FESM · fire severity';
     cap.innerHTML="<b>Fire Extent &amp; Severity Mapping.</b> Redder = higher severity. This is the disturbance input — where it burned hardest sets where recovery starts from zero, and where Lantana gets its opening.";
     legend.style.opacity=.3;
+  }else if(diff){
+    stageImg.src=d.diff; badge.className='badge'; badgeLbl.textContent='Diff · Oct–Dec change';
+    cap.innerHTML=d.diffCap; legend.style.display='none'; legendDiff.style.display='flex';
   }else{
     const s=d.steps[step];
     stageImg.src=s.img; badge.className='badge'; badgeLbl.textContent='NDVI · '+s.k;
     cap.innerHTML=s.cap; legend.style.opacity=1;
   }
-  [...stepsEl.children].forEach((b,i)=>b.className=(!fesm&&i===step)?'on':'');
+  [...stepsEl.children].forEach((b,i)=>b.className=(!fesm&&!diff&&i===step)?'on':'');
 }
 document.querySelectorAll('.tabs button').forEach(t=>{
   t.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
     t.classList.add('on');site=t.dataset.site;step=0;renderSteps();update();};
 });
-document.getElementById('fesmToggle').onchange=e=>{fesm=e.target.checked;update();};
+fesmToggle.onchange=e=>{fesm=e.target.checked;if(fesm){diff=false;diffToggle.checked=false;}update();};
+diffToggle.onchange=e=>{diff=e.target.checked;if(diff){fesm=false;fesmToggle.checked=false;}update();};
 renderSteps();update();
 
 // nav active state
