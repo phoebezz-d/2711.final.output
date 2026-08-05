@@ -81,31 +81,17 @@
   .btn:hover{background:var(--sage);color:#0a140d;border-color:var(--sage)}
 
   /* globe */
-  .globe-wrap{position:relative;display:flex;justify-content:center;align-items:center}
-  .globe{width:min(46vw,480px);aspect-ratio:1;border-radius:50%;position:relative;
-    background:
-      radial-gradient(circle at 34% 30%,rgba(200,225,205,.35),transparent 40%),
-      radial-gradient(circle at 60% 62%,#2c6b8a,#12324a 55%,#0a1c2c 85%);
-    box-shadow:0 0 70px rgba(90,150,180,.25),inset -22px -22px 60px rgba(0,0,0,.65),
-      inset 14px 14px 40px rgba(160,210,180,.12);
-    animation:spin 60s linear infinite}
-  .globe::before{content:"";position:absolute;inset:6%;border-radius:50%;
-    background:
-      radial-gradient(40px 26px at 30% 34%,rgba(90,150,90,.85),transparent 70%),
-      radial-gradient(70px 40px at 62% 44%,rgba(80,140,80,.8),transparent 70%),
-      radial-gradient(46px 60px at 54% 70%,rgba(100,150,90,.75),transparent 70%),
-      radial-gradient(30px 22px at 74% 62%,rgba(90,140,85,.7),transparent 70%),
-      radial-gradient(24px 18px at 40% 78%,rgba(85,135,80,.7),transparent 70%);
-    filter:blur(.4px);opacity:.9}
-  @keyframes spin{to{filter:hue-rotate(8deg)}}
+  .globe-wrap{position:relative;display:flex;justify-content:center;align-items:center;
+    width:min(46vw,480px);aspect-ratio:1;margin:0 auto;cursor:grab}
+  .globe-wrap:active{cursor:grabbing}
+  #globeViz{width:100%;height:100%}
+  #globeViz canvas{border-radius:50%}
   .glabel{position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);white-space:nowrap;
-    font-size:12px;color:var(--faint);border:1px dashed var(--edge2);border-radius:20px;padding:5px 14px}
+    font-size:12px;color:var(--faint);border:1px solid var(--edge2);border-radius:20px;padding:5px 14px;
+    background:rgba(8,13,10,.6);pointer-events:none}
   .gtag{position:absolute;top:2%;right:0;font-size:11px;color:var(--faint);
-    border:1px dashed var(--edge2);border-radius:6px;padding:4px 9px}
-  .pin{position:absolute;top:44%;left:70%;width:12px;height:12px;border-radius:50%;
-    background:var(--fesm);box-shadow:0 0 0 6px rgba(230,115,138,.25),0 0 16px var(--fesm);
-    animation:pulse 2s ease-out infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(230,115,138,.5)}100%{box-shadow:0 0 0 22px rgba(230,115,138,0)}}
+    border:1px solid var(--edge2);border-radius:6px;padding:4px 9px;background:rgba(8,13,10,.6);
+    pointer-events:none}
 
   /* legend chips */
   .chips{position:absolute;right:26px;bottom:24px;display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:420px}
@@ -215,16 +201,11 @@
     </div>
   </div>
   <div class="globe-wrap">
-    <div class="gtag">Real Earth · spins to study area</div>
-    <div class="globe"><span class="pin"></span></div>
-    <div class="glabel">[ interactive globe — zooms to eastern NSW ]</div>
+    <div class="gtag">Real Earth · drag to rotate</div>
+    <div id="globeViz"></div>
+    <div class="glabel">zoomed to eastern NSW study area</div>
   </div>
-  <div class="chips">
-    <div class="chip"><i style="background:var(--fesm)"></i>Fire severity · FESM</div>
-    <div class="chip"><i style="background:var(--bionet)"></i>Lantana presence · BioNet</div>
-    <div class="chip"><i style="background:var(--ndvi)"></i>Canopy recovery · NDVI</div>
-    <div class="chip"><i style="background:var(--pair)"></i>Paired sites</div>
-  </div>
+ 
 </div></header>
 
 <!-- METHOD -->
@@ -268,7 +249,7 @@
       <button data-site="moon">Moonpar<small>Moonpar State Forest, NSW</small></button>
     </div>
     <div class="stage">
-      <img id="stageImg" src="Dalmorton/DAL_BeforevAfter.png" alt="satellite greenness">
+      <img id="stageImg" src="images/Dalmorton/DAL_BeforevAfter.png" alt="satellite greenness">
       <div class="badge" id="badge"><b id="badgeLbl">NDVI · Before vs after fire</b></div>
     </div>
     <div class="controls">
@@ -311,23 +292,6 @@
   Signals are directional for an in-progress paired analysis, not final causal claims.</p>
 </div></section>
 
-<!-- REFERENCES -->
-<section id="references"><div class="wrap">
-  <div class="shead">
-    <span class="kick">Scientific Context</span>
-    <h2>References</h2>
-    <p>Lantana's fire-risk effects are documented; whether it measurably slows recovery
-    <i>rate</i> — detectable via NDVI, against uninvaded sites in the same fire — has not been
-    directly tested. That is the gap.</p>
-  </div>
-  <div class="refs">
-    <div class="ref"><b>Berry et al. 2011</b> — Lantana builds dense, continuous fuel beds, altering fire intensity/spread in landscapes that wouldn't otherwise carry fire.</div>
-    <div class="ref"><b>Rossiter-Rachor et al. 2008; Setterfield et al. 2010</b> — Northern-Australia parallel: invasive gamba grass amplifies fuel loads and fire intensity.</div>
-    <div class="ref"><b>Gooden et al. 2009</b> — Post-fire, Lantana-invaded sites do not converge with uninvaded reference sites, even after removal.</div>
-    <div class="ref"><b>McColl-Gausden et al. 2023</b> — Lantana abundance higher at high-severity 2019–20 fire sites.</div>
-  </div>
-</div></section>
-
 <!-- ABOUT -->
 <section id="about"><div class="wrap">
   <div class="shead">
@@ -349,6 +313,34 @@
     <div class="lever"><b>Recovery isn't fixed.</b> If Lantana measurably slows canopy recovery,
       that justifies targeting weed control to specific areas — and because NDVI is scalable, the
       approach implements across a much larger area than field survey alone.</div>
+    <div class="lever"><b>A concrete trigger, not a vibe.</b> Control programs are reactive and
+      expensive. A proven link between Lantana and slowed canopy return turns "Lantana is present
+      and generally considered bad" into a measurable, fundable case for acting on specific
+      recently-burnt sites.</div>
+    <div class="lever"><b>Cheap and repeatable.</b> The method isn't perfect and would need
+      refinement, but NDVI monitoring is easy to repeat — giving land managers a cheaper way to
+      track Lantana–fire interactions over areas far larger than plot surveys could feasibly cover.
+      With further work, the same approach could extend to other parts of Australia.</div>
+  </div>
+</div></section>
+
+<!-- REFERENCES -->
+<section id="references"><div class="wrap">
+  <div class="shead">
+    <span class="kick">Scientific Context</span>
+    <h2>References</h2>
+    <p>Lantana's fire-risk effects are documented; whether it measurably slows recovery
+    <i>rate</i> — detectable via NDVI, against uninvaded sites in the same fire — has not been
+    directly tested. That is the gap.</p>
+  </div>
+  <div class="refs">
+    <div class="ref"><b>Berry et al. 2011</b> — Lantana builds dense, continuous fuel beds, altering fire intensity/spread in landscapes that wouldn't otherwise carry fire.</div>
+    <div class="ref"><b>Rossiter-Rachor et al. 2008; Setterfield et al. 2010</b> — Northern-Australia parallel: invasive gamba grass amplifies fuel loads and fire intensity.</div>
+    <div class="ref"><b>Gooden et al. 2009</b> — Post-fire, Lantana-invaded sites do not converge with uninvaded reference sites, even after removal.</div>
+    <div class="ref"><b>McColl-Gausden et al. 2023</b> — Lantana abundance higher at high-severity 2019–20 fire sites.</div>
+    <div class="ref">Setterfield, S. A., Rossiter‐Rachor, N. A., Hutley, L. B., Douglas, M. M., &amp; Williams, R. J. (2010). BIODIVERSITY RESEARCH: Turning up the heat: the impacts of <i>Andropogon gayanus</i> (gamba grass) invasion on fire behaviour in northern Australian savannas. <i>Diversity and Distributions</i>, 16(5), 854–861. <a href="https://doi.org/10.1111/j.1472-4642.2010.00688.x">https://doi.org/10.1111/j.1472-4642.2010.00688.x</a></div>
+    <div class="ref">State Government of NSW &amp; NSW Department of Climate Change, Energy, the Environment and Water. (2020). <i>Fire Extent and Severity Mapping (FESM) 2018/19</i>. The Sharing and Enabling Environmental Data Portal. <a href="https://datasets.seed.nsw.gov.au/dataset/c2427005-febe-4e4e-a300-2c4ddd0066be">https://datasets.seed.nsw.gov.au/dataset/c2427005-febe-4e4e-a300-2c4ddd0066be</a></div>
+    <div class="ref">Geoscience Australia. (2022). <i>Geoscience Australia Sentinel-2A MSI Analysis Ready Data Collection 3 - DEA Surface Reflectance (Sentinel-2A MSI)</i> [Data set]. Geoscience Australia. <a href="https://doi.org/10.26186/146552">https://doi.org/10.26186/146552</a></div>
   </div>
 </div></section>
 
@@ -361,25 +353,25 @@
 <script>
 const DATA = {
   dal: {
-    fesm:"Dalmorton/DALMORTON_FESM.png",
+    fesm:"images/Dalmorton/DALMORTON_FESM.png",
     steps:[
-      {k:"Before/After",img:"Dalmorton/DAL_BeforevAfter.png",cap:"<b>Split view:</b> pre-fire canopy (left) vs immediately post-fire (right). The burnt right panel shows the greenness crash — a bare, orange fire scar along the river corridor."},
-      {k:"+6 weeks",img:"Dalmorton/DAL_Afterv6Weeks.png",cap:"<b>6 weeks post-fire:</b> first flush of regrowth. Faint greening returns to lower-severity edges while severe cores stay bare."},
-      {k:"+6 weeks",img:"Dalmorton/DAL_Afterv6Weeks1.png",cap:"<b>6 weeks (alt capture):</b> patchy recovery — regreening tracks where the fire burned hardest."},
-      {k:"+1 month",img:"Dalmorton/DAL_Afterv1Month.png",cap:"<b>~1 month:</b> greenness climbing back across most of the frame; the fire scar softens."},
-      {k:"+2 months",img:"Dalmorton/DAL_Afterv2Months.png",cap:"<b>~2 months:</b> broad return to green — but the question is whether it returns as native canopy or as Lantana understorey."}
+      {k:"Before/After",img:"images/Dalmorton/DAL_BeforevAfter.png",cap:"<b>Split view:</b> pre-fire canopy (left) vs immediately post-fire (right). The burnt right panel shows the greenness crash — a bare, orange fire scar along the river corridor."},
+      {k:"+6 weeks",img:"images/Dalmorton/DAL_Afterv6Weeks.png",cap:"<b>6 weeks post-fire:</b> first flush of regrowth. Faint greening returns to lower-severity edges while severe cores stay bare."},
+      {k:"+6 weeks",img:"images/Dalmorton/DAL_Afterv6Weeks1.png",cap:"<b>6 weeks (alt capture):</b> patchy recovery — regreening tracks where the fire burned hardest."},
+      {k:"+1 month",img:"images/Dalmorton/DAL_Afterv1Month.png",cap:"<b>~1 month:</b> greenness climbing back across most of the frame; the fire scar softens."},
+      {k:"+2 months",img:"images/Dalmorton/DAL_Afterv2Months.png",cap:"<b>~2 months:</b> broad return to green — but the question is whether it returns as native canopy or as Lantana understorey."}
     ]
   },
   moon: {
-    fesm:"Moonpar/MOONPAR_FESM.png",
+    fesm:"images/Moonpar/MOONPAR_FESM.png",
     steps:[
-      {k:"Before/After",img:"Moonpar/MOON_BeforevAfter1.png",cap:"<b>Split view A:</b> pre- vs post-fire NDVI at Moonpar. The right panel drops toward yellow — canopy stressed across the burn."},
-      {k:"Before/After",img:"Moonpar/MOON_BeforevAfter2.png",cap:"<b>Split view B:</b> second framing of the same fire event over the valley."},
-      {k:"+6 weeks",img:"Moonpar/MOON_Afterv6Weeks1.png",cap:"<b>6 weeks post-fire:</b> early regrowth begins on gentler slopes."},
-      {k:"+6 weeks",img:"Moonpar/MOON_Afterv6Weeks2.png",cap:"<b>6 weeks (alt capture):</b> confirms patchy, severity-linked recovery."},
-      {k:"+1 month",img:"Moonpar/MOON_Afterv1Month1.png",cap:"<b>~1 month:</b> greenness rebuilding — note the fast rebound typical where Lantana re-shoots."},
-      {k:"+1 month",img:"Moonpar/MOON_Afterv1Month2.png",cap:"<b>~1 month (alt capture):</b> continued greening across the valley floor."},
-      {k:"+2 months",img:"Moonpar/MOON_Afterv2Months.png",cap:"<b>~2 months:</b> near-full green cover — rapid regreening can mask a shift from native canopy to invader-dominated understorey."}
+      {k:"Before/After",img:"images/Moonpar/MOON_BeforevAfter1.png",cap:"<b>Split view A:</b> pre- vs post-fire NDVI at Moonpar. The right panel drops toward yellow — canopy stressed across the burn."},
+      {k:"Before/After",img:"images/Moonpar/MOON_BeforevAfter2.png",cap:"<b>Split view B:</b> second framing of the same fire event over the valley."},
+      {k:"+6 weeks",img:"images/Moonpar/MOON_Afterv6Weeks1.png",cap:"<b>6 weeks post-fire:</b> early regrowth begins on gentler slopes."},
+      {k:"+6 weeks",img:"images/Moonpar/MOON_Afterv6Weeks2.png",cap:"<b>6 weeks (alt capture):</b> confirms patchy, severity-linked recovery."},
+      {k:"+1 month",img:"images/Moonpar/MOON_Afterv1Month1.png",cap:"<b>~1 month:</b> greenness rebuilding — note the fast rebound typical where Lantana re-shoots."},
+      {k:"+1 month",img:"images/Moonpar/MOON_Afterv1Month2.png",cap:"<b>~1 month (alt capture):</b> continued greening across the valley floor."},
+      {k:"+2 months",img:"images/Moonpar/MOON_Afterv2Months.png",cap:"<b>~2 months:</b> near-full green cover — rapid regreening can mask a shift from native canopy to invader-dominated understorey."}
     ]
   }
 };
@@ -426,6 +418,59 @@ addEventListener('scroll',()=>{
   document.querySelectorAll('.nlinks a').forEach(a=>a.classList.remove('on'));
   if(navmap[cur])navmap[cur].classList.add('on');
 },{passive:true});
+</script>
+
+<script src="https://unpkg.com/globe.gl"></script>
+<script>
+(function(){
+  var el = document.getElementById('globeViz');
+  var wrap = document.querySelector('.globe-wrap');
+  var STUDY = { lat:-32.98, lng:150.77 }; // Wollemi NP / Gospers Mountain fire scar, eastern NSW
+
+  var world = Globe()(el)
+    .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+    .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+    .backgroundColor('rgba(0,0,0,0)')
+    .showAtmosphere(true)
+    .atmosphereColor('#7fa6e0')
+    .atmosphereAltitude(0.18)
+    .pointsData([{ lat:STUDY.lat, lng:STUDY.lng }])
+    .pointColor(function(){return '#e6738a'})
+    .pointAltitude(0.01)
+    .pointRadius(0.35)
+    .onPointClick(function(){ document.querySelector('.cta .btn.fill').click(); })
+    .onPointHover(function(pt){ el.style.cursor = pt ? 'pointer' : 'grab'; })
+    .ringsData([{ lat:STUDY.lat, lng:STUDY.lng }])
+    .ringColor(function(){return function(t){return 'rgba(230,115,138,'+(1-t)+')'}})
+    .ringMaxRadius(3.5)
+    .ringPropagationSpeed(1.2)
+    .ringRepeatPeriod(1400);
+
+  function size(){
+    var r = wrap.getBoundingClientRect();
+    world.width(r.width).height(r.height);
+  }
+  size();
+  addEventListener('resize', size);
+
+  var controls = world.controls();
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 1.1;
+  controls.enableZoom = true;
+
+  // slow global spin, then swoop in on the study area
+  world.pointOfView({ lat:-10, lng:100, altitude:2.4 }, 0);
+  setTimeout(function(){
+    controls.autoRotate = false;
+    world.pointOfView({ lat:STUDY.lat, lng:STUDY.lng, altitude:1.15 }, 2600);
+  }, 1800);
+
+  // resume gentle auto-rotate once the user isn't dragging
+  controls.addEventListener('start', function(){ controls.autoRotate = false; });
+  controls.addEventListener('end', function(){
+    setTimeout(function(){ controls.autoRotate = true; }, 4000);
+  });
+})();
 </script>
 </body>
 </html>
